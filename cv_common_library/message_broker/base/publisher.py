@@ -5,7 +5,7 @@ from typing import Any
 import aio_pika
 from pydantic import BaseModel
 
-from app.message_broker.base.connection import get_rabbitmq_channel
+from cv_common_library.message_broker.base.connection import get_rabbitmq_channel
 
 
 async def publish_message(
