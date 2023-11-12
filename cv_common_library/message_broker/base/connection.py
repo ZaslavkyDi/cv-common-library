@@ -50,8 +50,12 @@ async def __init_channel() -> None:
     __CHANNEL = await connection.channel()
 
     __CHANNEL.default_exchange = await __CHANNEL.declare_exchange(
-        name=get_rabbitmq_settings().exchange_name, type=ExchangeType.TOPIC, durable=True
+        name=get_rabbitmq_settings().exchange_name,
+        type=ExchangeType.TOPIC,
+        durable=True,
     )
     __CHANNEL.dlq_default_exchange = await __CHANNEL.declare_exchange(
-        name=get_rabbitmq_settings().dlq_exchange_name, type=ExchangeType.TOPIC, durable=True
+        name=get_rabbitmq_settings().dlq_exchange_name,
+        type=ExchangeType.TOPIC,
+        durable=True,
     )

@@ -26,7 +26,9 @@ async def consume_events(
 
     # Declare DLQ queue for failed letters
     await channel.declare_queue(
-        dlq_name, durable=True, arguments={"x-max-length": get_rabbitmq_settings().dlq_max_length}
+        dlq_name,
+        durable=True,
+        arguments={"x-max-length": get_rabbitmq_settings().dlq_max_length},
     )
 
     queue_dead_letter_params: dict[str, typing.Any] | None = None
@@ -59,12 +61,11 @@ MessageSchema = typing.TypeVar("MessageSchema", bound=BaseModel)
 
 
 class BaseAsyncConsumer(typing.Generic[MessageSchema], metaclass=abc.ABCMeta):
-
     def __init__(
         self,
         queue_name: str,
         routing_keys: tuple[str, ...],
-        enable_x_dead_letter: bool = True
+        enable_x_dead_letter: bool = True,
     ) -> None:
         self._queue_name = queue_name
         self._routing_keys = routing_keys
@@ -82,7 +83,9 @@ class BaseAsyncConsumer(typing.Generic[MessageSchema], metaclass=abc.ABCMeta):
     async def _process_event(self, message: AbstractIncomingMessage) -> None:
         async with message.process(ignore_processed=True):
             try:
-                message_schema: MessageSchema = await self._map_message_to_schema(message)
+                message_schema: MessageSchema = await self._map_message_to_schema(
+                    message
+                )
                 await self._do_staff(message_schema)
             except Exception as e:
                 logger.exception(f"Error in {self._queue_name}: {e!s}")
@@ -91,9 +94,13 @@ class BaseAsyncConsumer(typing.Generic[MessageSchema], metaclass=abc.ABCMeta):
                 await message.ack()
 
     @abc.abstractmethod
-    async def _map_message_to_schema(self, message: AbstractIncomingMessage) -> MessageSchema:
+    async def _map_message_to_schema(
+        self, message: AbstractIncomingMessage
+    ) -> MessageSchema:
         ...
 
     @abc.abstractmethod
-    async def _do_staff(self, message_schema: MessageSchema, **kwargs: typing.Any) -> typing.Any:
+    async def _do_staff(
+        self, message_schema: MessageSchema, **kwargs: typing.Any
+    ) -> typing.Any:
         ...
