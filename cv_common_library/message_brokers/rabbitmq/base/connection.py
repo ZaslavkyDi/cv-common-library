@@ -1,6 +1,6 @@
 from aio_pika import Channel, Connection, ExchangeType, connect
 
-from cv_common_library.message_broker.congif import get_rabbitmq_settings
+from cv_common_library.message_brokers.rabbitmq.congif import get_rabbitmq_settings
 
 __CONNECTION: Connection | None = None
 __CHANNEL: Channel | None = None

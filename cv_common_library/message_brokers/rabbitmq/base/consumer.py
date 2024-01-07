@@ -7,8 +7,10 @@ from aio_pika import Channel
 from aio_pika.abc import AbstractIncomingMessage
 from pydantic import BaseModel
 
-from cv_common_library.message_broker.base.connection import get_rabbitmq_channel
-from cv_common_library.message_broker.congif import get_rabbitmq_settings
+from cv_common_library.message_brokers.rabbitmq.base.connection import (
+    get_rabbitmq_channel,
+)
+from cv_common_library.message_brokers.rabbitmq.congif import get_rabbitmq_settings
 
 logger = logging.getLogger(__name__)
 
