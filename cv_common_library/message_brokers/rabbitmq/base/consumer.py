@@ -59,10 +59,7 @@ def _generate_queue_dead_letter_queue_params(queue_name: str) -> dict[str, typin
     }
 
 
-MessageSchema = typing.TypeVar("MessageSchema", bound=BaseModel)
-
-
-class BaseAsyncConsumer(typing.Generic[MessageSchema], metaclass=abc.ABCMeta):
+class BaseAsyncConsumer[T: BaseModel](metaclass=abc.ABCMeta):
     def __init__(
         self,
         queue_name: str,
@@ -85,7 +82,7 @@ class BaseAsyncConsumer(typing.Generic[MessageSchema], metaclass=abc.ABCMeta):
     async def _process_event(self, message: AbstractIncomingMessage) -> None:
         async with message.process(ignore_processed=True):
             try:
-                message_schema: MessageSchema = await self._map_message_to_schema(
+                message_schema: T = await self._map_message_to_schema(
                     message
                 )
                 await self._do_staff(message_schema)
@@ -98,11 +95,11 @@ class BaseAsyncConsumer(typing.Generic[MessageSchema], metaclass=abc.ABCMeta):
     @abc.abstractmethod
     async def _map_message_to_schema(
         self, message: AbstractIncomingMessage
-    ) -> MessageSchema:
+    ) -> T:
         ...
 
     @abc.abstractmethod
     async def _do_staff(
-        self, message_schema: MessageSchema, **kwargs: typing.Any
+        self, message_schema: T, **kwargs: typing.Any
     ) -> typing.Any:
         ...

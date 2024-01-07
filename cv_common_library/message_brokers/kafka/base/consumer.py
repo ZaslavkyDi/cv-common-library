@@ -1,17 +1,16 @@
 import abc
 import logging
-import typing
 from typing import ClassVar
 
 from confluent_kafka import Consumer, KafkaError, KafkaException, Message
+from pydantic import BaseModel
 
 from cv_common_library.message_brokers.kafka.base import kafka_consumer_settings, kafka_global_settings
-from cv_common_library.message_brokers.rabbitmq.base.consumer import MessageSchema
 
 logger = logging.getLogger(__name__)
 
 
-class BaseKafkaConsumer(typing.Generic[MessageSchema], metaclass=abc.ABCMeta):
+class BaseKafkaConsumer[T: BaseModel](metaclass=abc.ABCMeta):
     """
     A basic Kafka consumer class.
 
@@ -108,15 +107,6 @@ class BaseKafkaConsumer(typing.Generic[MessageSchema], metaclass=abc.ABCMeta):
         elif message.error():
             raise KafkaException(message.error())
 
+    @abc.abstractmethod
     def process_message(self, message: Message) -> None:
-        print(f"Received message: {message}")
-
-
-if __name__ == '__main__':
-    topics = ["topic1", "topic2"]
-    consumer_1 = BaseKafkaConsumer(
-        group_id="m-consumer-group-1",
-        auto_offset_reset="latest",
-        topics_to_subscribe=topics,
-    )
-    consumer_1.start_consuming()
+        pass

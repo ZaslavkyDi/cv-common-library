@@ -26,15 +26,3 @@ async def publish_message(
         message=aio_pika.Message(body=message.encode()),
         routing_key=routing_key,
     )
-
-
-async def main() -> None:
-    message = {"1": "2"}
-
-    await publish_message(message=message, routing_key="test_r")
-
-    print(" [x] Sent ")
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
