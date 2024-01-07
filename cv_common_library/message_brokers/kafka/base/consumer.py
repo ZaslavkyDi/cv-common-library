@@ -1,14 +1,17 @@
+import abc
 import logging
+import typing
 from typing import ClassVar
 
 from confluent_kafka import Consumer, KafkaError, KafkaException, Message
 
 from cv_common_library.message_brokers.kafka.base import kafka_consumer_settings, kafka_global_settings
+from cv_common_library.message_brokers.rabbitmq.base.consumer import MessageSchema
 
 logger = logging.getLogger(__name__)
 
 
-class BaseKafkaConsumer:
+class BaseKafkaConsumer(typing.Generic[MessageSchema], metaclass=abc.ABCMeta):
     """
     A basic Kafka consumer class.
 
