@@ -28,7 +28,7 @@ class BaseKafkaConsumer[T: BaseModel](metaclass=abc.ABCMeta):
             auto_offset_reset="latest",
             topics_to_subscribe=topics,
         )
-        consumer_1.start_consuming()
+        await consumer_1.start_consuming()
     """
 
     _END_OF_PARTITION_EVENT_MESSAGE_TEMPLATE: ClassVar[
@@ -66,7 +66,7 @@ class BaseKafkaConsumer[T: BaseModel](metaclass=abc.ABCMeta):
     def consumer_state(self) -> bool:
         return self._consumer_state
 
-    def start_consuming(self) -> None:
+    async def start_consuming(self) -> None:
         """
         Starts consuming messages from the subscribed topics.
 
@@ -83,17 +83,17 @@ class BaseKafkaConsumer[T: BaseModel](metaclass=abc.ABCMeta):
                 continue
 
             if message.error():
-                self.handle_message_error(message)
+                await self.handle_message_error(message)
                 continue
 
-            self.process_message(message)
+            await self.process_message(message)
 
             msg_count += 1
             if msg_count % kafka_consumer_settings().default_min_commit_count == 0:
                 msg_count = 0
                 self._kafka_consumer.commit(asynchronous=False)
 
-    def handle_message_error(self, message):
+    async def handle_message_error(self, message):
         if message.error().code() == KafkaError._PARTITION_EOF:
             # End of partition event
             end_of_partition_message = (
@@ -108,5 +108,5 @@ class BaseKafkaConsumer[T: BaseModel](metaclass=abc.ABCMeta):
             raise KafkaException(message.error())
 
     @abc.abstractmethod
-    def process_message(self, message: Message) -> None:
+    async def process_message(self, message: Message) -> None:
         pass
