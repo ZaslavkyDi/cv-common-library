@@ -88,11 +88,6 @@ class BaseKafkaConsumer[T: BaseModel](metaclass=abc.ABCMeta):
 
             await self.process_message(message)
 
-            msg_count += 1
-            if msg_count % kafka_consumer_settings().default_min_commit_count == 0:
-                msg_count = 0
-                self._kafka_consumer.commit(asynchronous=False)
-
     async def handle_message_error(self, message):
         if message.error().code() == KafkaError._PARTITION_EOF:
             # End of partition event
