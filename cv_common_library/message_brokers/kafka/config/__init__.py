@@ -1,6 +1,8 @@
 from functools import cache
 
-from cv_common_library.message_brokers.kafka.config.settings import ApacheKafkaGlobalSettings
+from cv_common_library.message_brokers.kafka.config.settings import (
+    ApacheKafkaGlobalSettings,
+)
 
 
 @cache

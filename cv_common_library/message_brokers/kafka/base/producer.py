@@ -5,6 +5,7 @@ from typing import Any, Self
 from confluent_kafka import Producer
 
 from cv_common_library.message_brokers.kafka.base import kafka_global_settings
+from cv_common_library.message_brokers.schemas import BaseMessageSchema
 
 logger = logging.getLogger(__name__)
 
@@ -59,20 +60,27 @@ class KafkaProducer:
             topic=topic,
         )
 
-    def send(
+    def send_kafka_message(
         self,
-        value: str | bytes,
+        value: BaseMessageSchema,
         key: str | None = None,
     ) -> None:
         """
         Sends a message to the topic.
 
         Args:
-            value (str | bytes): The message to send.
+            value (BaseMessageSchema): The message to send.
             key (str, optional): The key associated with the message.
         """
+        if not isinstance(value, BaseMessageSchema):
+            raise TypeError(f"Expected {BaseMessageSchema}, got {type(value)}")
+
+        raw_value = value.model_dump_json().encode()
         self._kafka_producer.produce(
-            self._topic, key=key, value=value, on_delivery=self._ack_message_on_delivery
+            self._topic,
+            key=key,
+            value=raw_value,
+            on_delivery=self._ack_message_on_delivery,
         )
 
     @staticmethod

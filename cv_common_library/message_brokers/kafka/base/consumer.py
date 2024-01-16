@@ -5,7 +5,10 @@ from typing import ClassVar
 from confluent_kafka import Consumer, KafkaError, KafkaException, Message
 from pydantic import BaseModel
 
-from cv_common_library.message_brokers.kafka.base import kafka_consumer_settings, kafka_global_settings
+from cv_common_library.message_brokers.kafka.base import (
+    kafka_consumer_settings,
+    kafka_global_settings,
+)
 
 logger = logging.getLogger(__name__)
 
