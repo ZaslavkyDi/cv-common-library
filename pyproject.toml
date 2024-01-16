@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cv-common-library"
-version = "0.4.5"
+version = "0.4.6"
 description = ""
 authors = ["DmytroZasl <zaslavsky.dima20@gmail.com>"]
 readme = "README.md"
@@ -8,7 +8,6 @@ packages = [{include = "cv_common_library"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-aio-pika = "^9.3.0"
 pydantic = "^2.4.2"
 pydantic-settings = "^2.0.3"
 pytest = "^7.4.3"
