@@ -77,7 +77,6 @@ class BaseKafkaConsumer[T: BaseModel](metaclass=abc.ABCMeta):
         """
         self._kafka_consumer.subscribe(self._topics)
 
-        msg_count = 0
         while self._consumer_state:
             message: Message | None = self._kafka_consumer.poll(
                 timeout=kafka_consumer_settings().default_poll_timeout
