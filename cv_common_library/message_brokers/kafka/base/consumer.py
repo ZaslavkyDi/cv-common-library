@@ -75,6 +75,7 @@ class BaseKafkaConsumer(metaclass=abc.ABCMeta):
 
         The consumer will keep running until its state is set to False.
         """
+        logger.info(f"Starting consuming messages from Kafka on topics: {self._topics}")
         self._kafka_consumer.subscribe(self._topics)
 
         while self._consumer_state:
