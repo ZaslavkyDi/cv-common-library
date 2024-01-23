@@ -4,12 +4,12 @@ from pydantic import BaseModel
 from cv_common_library.schemas.cv_data_storage.candidates_result import CandidatesPageResultSchema
 
 
-class CandidateResultOutgoingBodyMessageSchema(BaseModel):
+class CandidateResultBodyMessageSchema(BaseModel):
     page_result: CandidatesPageResultSchema
     source: str
 
 
-class CandidateResultOutgoingMessageSchema(BaseMessageSchema):
+class CandidateResultMessageSchema(BaseMessageSchema):
     """
     Message schema example:
     {
@@ -34,4 +34,4 @@ class CandidateResultOutgoingMessageSchema(BaseMessageSchema):
     }
     """
 
-    body: CandidateResultOutgoingBodyMessageSchema
+    body: CandidateResultBodyMessageSchema
