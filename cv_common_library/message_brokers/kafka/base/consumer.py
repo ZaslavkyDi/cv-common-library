@@ -13,7 +13,7 @@ from cv_common_library.message_brokers.kafka.base import (
 logger = logging.getLogger(__name__)
 
 
-class BaseKafkaConsumer[T: BaseModel](metaclass=abc.ABCMeta):
+class BaseKafkaConsumer(metaclass=abc.ABCMeta):
     """
     A basic Kafka consumer class.
 
